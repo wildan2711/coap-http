@@ -51,7 +51,9 @@ namespace coap
                 String payload = exchange.Request.PayloadString;
                 SensorResult dict = JsonConvert.DeserializeObject<SensorResult>(payload);
                 
-                Console.WriteLine(dict);
+                Console.WriteLine("id: {0}", dict.id);
+                Console.WriteLine("suhu: {0}", dict.suhu);
+                Console.WriteLine("lembab: {0}", dict.lembab);
                 currentCondition = dict;
             }
         }
