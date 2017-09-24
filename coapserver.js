@@ -10,6 +10,7 @@ var suhu = 0
 var lembab = 0
 
 coapServer.on('request', function(req, res) {
+    console.log(req)
     var route = req.url.split('/')[1]
     var payload = JSON.parse(req.payload) 
     if (route == "monitor") {
@@ -21,7 +22,7 @@ coapServer.on('request', function(req, res) {
         var url = httpServerIP + ':' + httpServerPort
                     +'/monitor?suhu='
                     +suhu
-                    +"?lembab="
+                    +"&lembab="
                     +lembab
         request.get(url)
     }
