@@ -34,9 +34,9 @@ namespace coap
                 Console.WriteLine(ex.Message);
             }
 
-            Console.WriteLine("Press any key to exit.");
-            Console.ReadKey();
-            // server.Add(new SensorResource());
+            Console.WriteLine("Press Ctrl + C to exit.");
+            
+            while(true);
         }
 
         class SensorResource : Resource
