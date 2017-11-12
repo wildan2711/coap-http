@@ -23,8 +23,9 @@ msbuild.log
 msbuild.err
 msbuild.wrn
 
-
+coap/bin
 !coap/bin/Debug/netcoreapp2.0/linux-arm
+node_modules
 
 # Visual Studio 2015
 .vs/

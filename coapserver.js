@@ -3,7 +3,7 @@ var http        = require('http')
 var request     = require('request')
 var bl          = require('bl')
 var coapServerIP = "192.168.100.25"
-var sensorEndpoint = "/sensor"
+var sensorEndpoint = "/monitor"
 
 var port = "8080"
 
