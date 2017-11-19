@@ -12,7 +12,7 @@ namespace coap
 {
     class Coap
     {
-        public static string CoapURI = "coap://192.168.43.100/monitor";
+        public static string CoapURI = "coap://192.168.43.237:5683/monitor";
         static void Main(string[] args)
         {
             BuildWebHost(args).Run();
@@ -42,10 +42,7 @@ namespace coap
                             await context.Response.Body.WriteAsync(response, 0, response.Length);       
                         }
                         else {
-                            string data = Utils.ToString(coapResponse);
-                            byte[] response = Encoding.UTF8.GetBytes(data);
-                            
-                            await context.Response.Body.WriteAsync(response, 0, response.Length);
+                            await context.Response.Body.WriteAsync(coapResponse.Payload, 0, coapResponse.Payload.Length);
                         }
 
                     } 
