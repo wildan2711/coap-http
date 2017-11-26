@@ -12,7 +12,12 @@ namespace coap
 {
     class Coap
     {
-        public static string CoapURI = "coap://192.168.43.237:5683/monitor";
+        public static string[] CoapServerIPs = {
+            "127.0.0.1:5683",
+            "127.0.0.1:5684",
+            "127.0.0.1:5685"
+        };
+        public static string Endpoint = "/monitor";
         static void Main(string[] args)
         {
             BuildWebHost(args).Run();
@@ -28,21 +33,29 @@ namespace coap
 
                 app.Run(async (context) => {
                     try {
-                        Request request = new Request(Method.GET);
-                        request.URI = new Uri(CoapURI);
-                        request.Send();
+                        int n;
+                        string route = context.Request.Path.ToString().Substring(1);
+                        bool isNumber = int.TryParse(route, out n);
+                        if (isNumber) {
+                            int id = Convert.ToInt32(route) - 1;
+                            Request request = new Request(Method.GET);
+                            request.URI = new Uri("coap://"+CoapServerIPs[id]+Endpoint);
+                            request.Send();
 
-                        Response coapResponse = request.WaitForResponse();
-                        
-                        if (coapResponse == null) {
-                            Console.WriteLine("Request timed out");
-                            byte[] response = Encoding.UTF8.GetBytes("Request timed out");
+                            Response coapResponse = request.WaitForResponse();
+                            
+                            if (coapResponse == null) {
+                                Console.WriteLine("Request timed out");
+                                byte[] response = Encoding.UTF8.GetBytes("{\"error\": \"Invalid device ID or device not connected\"");
 
-                            context.Response.StatusCode = 500;
-                            await context.Response.Body.WriteAsync(response, 0, response.Length);       
-                        }
-                        else {
-                            await context.Response.Body.WriteAsync(coapResponse.Payload, 0, coapResponse.Payload.Length);
+                                context.Response.StatusCode = 500;
+                                context.Response.ContentType = "application/json";
+                                await context.Response.Body.WriteAsync(response, 0, response.Length);       
+                            }
+                            else {
+                                context.Response.ContentType = "application/json";
+                                await context.Response.Body.WriteAsync(coapResponse.Payload, 0, coapResponse.Payload.Length);
+                            }
                         }
 
                     } 
